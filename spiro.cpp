@@ -16,12 +16,11 @@ void split2(const std::string& str, std::vector<std::string>& cont, char delim =
 }
 
 int main(int argc, char *argv[]){
-	bool		nextPattern = false;
-	int			winX=800, winY=600;
-	//int			winX=1920, winY=1080;
-	int			width, tempx, tempy, counter, red, green, blue;
-	float		cX, cY, X, Y, x, y, r, d, R, theta, Theta, dT, temp;
-	std::string	line, line2, sign;
+	bool	nextPattern = false;
+	int		winX=800, winY = 600;
+	int 	width, tempx, tempy, counter, red, green, blue;
+	float	cX, cY, X, Y, x, y, r, d, R, theta, Theta, dT, temp;
+	std::string line, line2, sign;
 	std::vector<std::string> vline;
 
 	theta = 0.;
@@ -31,11 +30,10 @@ int main(int argc, char *argv[]){
 	//Create the main window
 	sf::RenderWindow window(sf::VideoMode(winX, winY), "Spirograph!");
 
-	sf::Uint8*		pixels = new sf::Uint8[winX*winY*4];
-	sf::Texture		texture;
+	sf::Uint8*	pixels = new sf::Uint8[winX*winY*4];
+	sf::Texture texture;
 	texture.create(winX, winY);
-
-	sf::Sprite		sprite(texture);
+	sf::Sprite sprite(texture);
 
 	//Initialize all pixels to black
 	for (int i = 0; i < winX*winY*4; i+=4){
@@ -45,16 +43,14 @@ int main(int argc, char *argv[]){
 		pixels[i+3] = 255;
 	}
 
-	counter = 0;
-
-	//Input file reading stuff
-	std::ifstream	inp(argv[1]);
-	std::getline(inp, line); //Skip the first line
-	std::getline(inp, line);
+	// Read the first line in the input file
+	std::ifstream inp(argv[1]);
+	std::getline(inp, line); // Skip the first line
+	std::getline(inp, line); // The real first line of the input
 	split2(line, vline);
 	r = std::stod(vline[0]); d = std::stod(vline[1]); R = std::stod(vline[2]), cX = std::stod(vline[3]), cY = std::stod(vline[4]);
 	red = std::stoi(vline[5]); green = std::stoi(vline[6]); blue = std::stoi(vline[7]); sign = vline[8];
-	width = std::stod(vline[9]);
+	width = std::stoi(vline[9]);
 
 	while (window.isOpen()){
 		sf::Event event;
@@ -62,10 +58,11 @@ int main(int argc, char *argv[]){
 			if (event.type == sf::Event::Closed) window.close();
 
 			if (event.type == sf::Event::KeyPressed){
-				if (event.key.code == sf::Keyboard::RControl) dT = M_PI/1500.;
+				if (event.key.code == sf::Keyboard::RControl) dT += M_PI/10000.;
 			}
 			if (event.type == sf::Event::KeyPressed){
-				if (event.key.code == sf::Keyboard::LControl) dT = M_PI/500.;
+				if (event.key.code == sf::Keyboard::LControl) dT -= M_PI/10000.;
+				if (dT < 0.) dT = 0.;
 			}
 			if (event.type == sf::Event::KeyPressed){
 				if (event.key.code == sf::Keyboard::Return) nextPattern = true;
@@ -73,11 +70,11 @@ int main(int argc, char *argv[]){
 			if (event.type == sf::Event::KeyReleased and nextPattern){
 				if (event.key.code == sf::Keyboard::Return){
 					vline.clear();
-					std::getline(inp,line);
+					std::getline(inp, line);
 					split2(line, vline);
 					r = std::stod(vline[0]); d = std::stod(vline[1]); R = std::stod(vline[2]), cX = std::stod(vline[3]), cY = std::stod(vline[4]);
-					red = stoi(vline[5]); green = stoi(vline[6]); blue = stoi(vline[7]); sign = vline[8];
-					width = std::stod(vline[9]);
+					red = std::stoi(vline[5]); green = std::stoi(vline[6]); blue = std::stoi(vline[7]); sign = vline[8];
+					width = std::stoi(vline[9]);
 					nextPattern = false;
 				}
 			}
@@ -111,8 +108,5 @@ int main(int argc, char *argv[]){
 		window.draw(sprite);
 		window.display();
 	}
-
 	inp.close();
-
-	return 0;
 }
