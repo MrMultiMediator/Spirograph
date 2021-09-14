@@ -64,6 +64,7 @@ int main(int argc, char *argv[]){
 				if (event.key.code == sf::Keyboard::LControl) dT -= M_PI/10000.;
 				if (dT < 0.) dT = 0.;
 			}
+			// Go to the next spirograph when the user hits, and then releases the return key.
 			if (event.type == sf::Event::KeyPressed){
 				if (event.key.code == sf::Keyboard::Return) nextPattern = true;
 			}
@@ -79,6 +80,8 @@ int main(int argc, char *argv[]){
 				}
 			}
 		}
+		
+		// The "Spiromath" - the engine that controls the updating of the location of the pencil that draws the spirograph
 		Theta += dT;
 
 		if (sign == "m") theta -= dT*2*R/d;
@@ -94,6 +97,8 @@ int main(int argc, char *argv[]){
 		tempy = int(y);
 
 		counter = 0;
+		
+		// Change the pixel colors at the pencil location (and nearby locations to accomodate the requested 'stroke width') to the color specified by the user.
 		while (counter < width){
 			if ((4*tempy*winX+4*(tempx+counter-int(0.5*counter))) < winX*winY*4){
 				pixels[4*tempy*winX+4*(tempx+counter-int(0.5*counter))+0] = red;
